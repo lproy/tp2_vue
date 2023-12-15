@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div>
     <h2>{{ title }}</h2>
@@ -8,74 +9,53 @@
       <button @click="sort('modifiedDate')">Date</button>
       <span>Recherche par nom: <input v-model="filterName"/></span>
     </fieldset>
-    <button @click="previousPage" :disabled="pageNumber===1">
-      &lt; Précédent
+    <button @click="prevPage" :disabled="pageNumber === 1">
+      &lt; Previous
     </button>
     Page {{ pageNumber }}
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
-      Suivant &gt;
+      Next &gt;
     </button>
     <ul class="products">
-      <li v-for="product in sortedFilteredPaginatedProducts" v-bind:key="product.id"
-          v-bind:class='{ discontinued: product.discontinued, selected: selectedProduct === product }'
-          @click="selectedProduct = product"
-          :title="JSON.stringify(product)">
-<!--        <router-link :to="{ name: 'productDetailsView', params: { id: product.id }}">-->
-          <span class="name">{{ product.name }}</span>
-          <span class="description">{{ product.description }}</span>
-          <span class="price">{{ product.price }}</span>
-<!--        </router-link>-->
+      <li
+          v-for="product in sortedFilteredPaginatedProducts"
+          :key="product.id"
+          v-bind:class="{
+          discontinued: product.discontinued,
+          selected: selectedProduct === product,
+        }"
+          @click="onSelect(product)"
+      >
+        <span class="name">{{ product.name }}</span>
+        <span class="description">{{ product.description }}</span>
+        <span class="price">{{ product.price }}</span>
       </li>
     </ul>
-            <ProductDetails :product="selectedProduct" />
   </div>
 </template>
 
 <script>
-import ProductDetails from '@/components/ProductDetails.vue';
-import {RouterLink} from "vue-router";
-
 export default {
-  components: {
-    RouterLink,
-    ProductDetails,
-  },
   props: {
     products: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     pageSize: {
       type: Number,
       required: false,
-      default: 5
+      default: 5,
     },
   },
   data() {
     return {
-      title: "Liste des produits",
+      title: "Products",
       selectedProduct: null,
       pageNumber: 1,
       filterName: '',
       sortName: 'modifiedDate',
       sortDir: 'asc',
-    }
-  },
-  methods: {
-    sort: function (fieldToSort) {
-      if (fieldToSort === this.sortName) {
-        this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
-      }
-      this.sortName = fieldToSort;
-    },
-    nextPage() {
-      this.pageNumber++;
-      this.selectedProduct = null;
-    },
-    previousPage() {
-      this.pageNumber--;
-      this.selectedProduct = null;
-    },
+    };
   },
   computed: {
     filteredProducts() {
@@ -84,7 +64,6 @@ export default {
     },
     sortedFilteredProducts() {
       return this.filteredProducts.sort((a, b) => {
-        //return [...this.filteredProducts].sort((a,b) => {
         let modifier = 1;
         if (this.sortDir === 'desc') modifier = -1;
         if (a[this.sortName] < b[this.sortName]) return -1 * modifier;
@@ -100,39 +79,32 @@ export default {
     },
     pageCount() {
       let nbProducts = this.products.length;
-      return Math.ceil(nbProducts / this.pageSize);
-    }
+      return Math.floor(nbProducts / this.pageSize);
+    },
   },
-  watch: {
-    // reset pagination when filtering
-    filterName() {
-      this.pageNumber = 1;
+  methods: {
+    sort: function (fieldToSort) {
+      if (fieldToSort === this.sortName) {
+        this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+      }
+      this.sortName = fieldToSort;
     },
-    // reset pagination when sorting
-    sortName() {
-      this.pageNumber = 1;
+    nextPage() {
+      this.pageNumber++;
+      this.selectedProduct = null;
     },
-    sortDir() {
-      this.pageNumber = 1;
-    }
-  }
-}
+    prevPage() {
+      this.pageNumber--;
+      this.selectedProduct = null;
+    },
+    onSelect(product) {
+      this.$router.push({name: "product", params: {id: product.id}});
+    },
+  },
+};
 </script>
 
 <style lang="css" scoped>
-.filters {
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.filters button {
-  margin: 3px;
-}
-
-.filters span {
-  margin: 10px;
-}
-
 .products {
   margin: 0;
   list-style-type: none;
@@ -143,28 +115,28 @@ export default {
   cursor: pointer;
   position: relative;
   left: 0;
-  background-color: #EEE;
-  margin: .5em;
-  padding: .3em 0em;
+  background-color: #eee;
+  margin: 0.5em;
+  padding: 0.3em 0em;
   height: 1.8em;
   border-radius: 4px;
 }
 
 .products li:hover {
-  color: #607D8B;
+  color: #607d8b;
   background-color: yellow;
-  left: .1em;
+  left: 0.1em;
 }
 
 .products li:hover .name,
 .products li:hover .price {
-  color: #607D8B;
-  background-color: #FFD800;
-  left: .1em;
+  color: #607d8b;
+  background-color: #ffd800;
+  left: 0.1em;
 }
 
 .products li.selected {
-  background-color: #0094FF;
+  background-color: #0094ff;
   color: white;
 }
 
@@ -174,7 +146,7 @@ export default {
 
 .products li.selected .name,
 .products li.selected .price {
-  background-color: #0026FF;
+  background-color: #0026ff;
   color: white;
 }
 
@@ -187,13 +159,13 @@ export default {
   display: inline-block;
   color: white;
   padding: 0.5em 0.7em 0em 0.7em;
-  background-color: #607D8B;
+  background-color: #607d8b;
   line-height: 1em;
   position: relative;
   left: -1px;
   top: -4px;
   height: 1.8em;
-  margin-right: .8em;
+  margin-right: 0.8em;
   border-radius: 4px 0px 0px 4px;
   width: 30%;
   white-space: nowrap;
@@ -203,16 +175,16 @@ export default {
 
 .products .price {
   float: right;
-  width: 20%;
+  width: 15%;
   color: white;
   padding: 0.5em 0.7em 0em 0.7em;
-  background-color: #607D8B;
+  background-color: #607d8b;
   line-height: 1em;
   position: relative;
   left: -1px;
   top: -4px;
   height: 1.8em;
-  margin-left: .8em;
+  margin-left: 0.8em;
   border-radius: 0px 4px 4px 0px;
 }
 
@@ -225,7 +197,8 @@ export default {
   text-overflow: ellipsis;
 }
 
-.products .discontinued, .products .discontinued * {
+.products .discontinued,
+.products .discontinued * {
   color: red !important;
 }
 </style>

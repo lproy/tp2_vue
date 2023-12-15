@@ -1,33 +1,33 @@
-<script setup>
-import ProductDetails from '@/components/ProductDetails.vue';
-</script>
-
-
-<script>
-
-export default {
-
-  props: {
-    // Utilisez le paramètre de route pour obtenir l'ID du produit
-    id: {
-      type: String,
-      required: true,
-    }
-  },
-  computed: {
-    // Utilisez un getter computed pour obtenir le produit correspondant à l'ID
-    product() {
-      return this.products.find(product => product.id === parseInt(this.id));
-    }
-  }
-}
-
-</script>
-
 <template>
-  <ProductDetails :product="product()" />
+  <h1>Id: {{ id }}</h1>
+  <h2>{{ product.name }}</h2>
+  <img
+      :src="product.imageUrl ? product.imageUrl : 'https://placeimg.com/200/200/tech'" width="200"  style="float: right" />
+  <h3>{{ product.description }}</h3>
+  <p>Prix: {{ product.price }}</p>
+  <p>Prix fixe? {{ product.fixedPrice }}</p>
+  <p>Discontinué? {{ product.discontinued }}</p>
+  <p>Date de modification: {{ product.modifiedDate }}</p>
 </template>
 
-<style scoped>
+<script>
+import { getProduct } from '@/services/ProductService.js';
 
-</style>
+export default {
+  data() {
+    return {
+      product: Object,
+    };
+  },
+  props: {
+    id: {
+      type: Number,
+    },
+  },
+  mounted() {
+    getProduct(this.id).then(response => this.product = response);
+  },
+};
+</script>
+
+<style lang="css" scoped></style>

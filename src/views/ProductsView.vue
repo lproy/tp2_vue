@@ -1,37 +1,22 @@
-<script setup>
-import ProductList from '@/components/ProductList.vue';
-</script>
+<template>
+  <ProductList :products="products" :page-size="5"></ProductList>
+</template>
+
 <script>
+import ProductList from "@/components/ProductList.vue";
+import { getAllProducts } from '@/services/ProductService.js';
 
 export default {
-  props: {
-    nom: {
-      type: String
-    }
+  components: {
+    ProductList,
   },
   data() {
     return {
-      id: 1,
-      products: null
+      products: []
     }
   },
-  methods : {
-    async fetchData() {
-      const response = await fetch('http://storerestservice.azurewebsites.net/api/products/');
-      this.products = await response.json();
-    }
+  mounted() {
+    getAllProducts().then(response => this.products = response);
   },
-  created () { // aura lieu au chargement du component
-    this.fetchData();
-  },
-}
+};
 </script>
-
-<template>
-  <main>
-    <ProductList :products="products" :page-size="5" />
-  </main>
-</template>
-<style scoped>
-
-</style>
