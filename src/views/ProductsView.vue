@@ -1,5 +1,5 @@
 <template>
-  <ProductList :products="products" :page-size="5"></ProductList>
+  <ProductList :products="products" :page-size="10"></ProductList>
 </template>
 
 <script>
@@ -16,7 +16,11 @@ export default {
     }
   },
   mounted() {
-    getAllProducts().then(response => this.products = response);
+    getAllProducts().then(response => {
+      this.products = response.results;
+      console.log('Liste des produits :',response.results);
+    });
+    // getAllProducts().then(response => this.products = response);
   },
 };
 </script>

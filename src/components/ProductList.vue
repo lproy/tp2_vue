@@ -4,9 +4,9 @@
     <h2>{{ title }}</h2>
     <fieldset class="filters">
       Trier par:
-      <button @click="sort('name')">Nom</button>
+      <button @click="sort('title')">Nom</button>
       <button @click="sort('price')">Prix</button>
-      <button @click="sort('modifiedDate')">Date</button>
+      <button @click="sort('release_date')">Date</button>
       <span>Recherche par nom: <input v-model="filterName"/></span>
     </fieldset>
     <button @click="prevPage" :disabled="pageNumber === 1">
@@ -26,9 +26,13 @@
         }"
           @click="onSelect(product)"
       >
-        <span class="name">{{ product.name }}</span>
-        <span class="description">{{ product.description }}</span>
-        <span class="price">{{ product.price }}</span>
+
+        <img
+            :src="imageBaseUrl + 'w200' + product.poster_path"
+            width="200"
+        />
+        <span class="name">{{ product.title }}</span>
+        <span class="release_date">{{ product.release_date }}</span>
       </li>
     </ul>
   </div>
@@ -53,14 +57,15 @@ export default {
       selectedProduct: null,
       pageNumber: 1,
       filterName: '',
-      sortName: 'modifiedDate',
+      sortName: 'release_date',
       sortDir: 'asc',
+      imageBaseUrl: 'https://image.tmdb.org/t/p/', // Ajoutez le préfixe de base ici
     };
   },
   computed: {
     filteredProducts() {
       let filter = new RegExp(this.filterName, 'i')
-      return this.products.filter(elem => elem.name.match(filter))
+      return this.products.filter(elem => elem.title.match(filter))
     },
     sortedFilteredProducts() {
       return this.filteredProducts.sort((a, b) => {
@@ -115,24 +120,25 @@ export default {
   cursor: pointer;
   position: relative;
   left: 0;
+  height: 100%;
   background-color: #eee;
   margin: 0.5em;
   padding: 0.3em 0em;
-  height: 1.8em;
+  //height: 1.8em;
   border-radius: 4px;
 }
 
 .products li:hover {
   color: #607d8b;
   background-color: yellow;
-  left: 0.1em;
+  //left: 0.1em;
 }
 
 .products li:hover .name,
 .products li:hover .price {
   color: #607d8b;
   background-color: #ffd800;
-  left: 0.1em;
+  //left: 0.1em;
 }
 
 .products li.selected {

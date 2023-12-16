@@ -1,6 +1,6 @@
 <template>
   <h1>Id: {{ id }}</h1>
-  <h2>{{ product.name }}</h2>
+  <h2>{{ product.original_title }}</h2>
   <img
       :src="product.imageUrl ? product.imageUrl : 'https://placeimg.com/200/200/tech'" width="200"  style="float: right" />
   <h3>{{ product.description }}</h3>
