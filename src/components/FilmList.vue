@@ -6,6 +6,13 @@
       Trier par:
       <button @click="sort('title')">Nom</button>
       <button @click="sort('release_date')">Date de sortie</button>
+
+      <label for="genreSelect">Genre:</label>
+      <select v-model="selectedGenre" @change="onSelectGenre(selectedGenre)" id="genreSelect">
+        <option value="">Tous les genres</option>
+        <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
+      </select>
+
       <span>Recherche par nom: <input v-model="filterName"/></span>
     </fieldset>
     <button @click="prevPage" :disabled="pageNumber === 1">
@@ -29,7 +36,7 @@
         <img
             :src="imageBaseUrl + 'w200' + film.poster_path"
             width="200"
-         alt=""/>
+            alt=""/>
         <span class="name">{{ film.title }}</span>
         <span class="release_date">{{ film.release_date }}</span>
       </li>
@@ -38,6 +45,8 @@
 </template>
 
 <script>
+import {getAllGenres} from '@/services/Filmservice.js';
+
 export default {
   props: {
     films: {
@@ -59,7 +68,12 @@ export default {
       sortName: 'release_date',
       sortDir: 'asc',
       imageBaseUrl: 'https://image.tmdb.org/t/p/', // Ajoutez le préfixe de base ici
+      selectedGenre: '',
+      genres: [],
     };
+  },
+  mounted() {
+    getAllGenres().then(response => this.genres = response.genres);
   },
   computed: {
     filteredfilms() {
@@ -78,7 +92,6 @@ export default {
     sortedFilteredPaginatedfilms() {
       const start = (this.pageNumber - 1) * this.pageSize,
           end = start + this.pageSize;
-
       return this.sortedFilteredfilms.slice(start, end);
     },
     pageCount() {
@@ -104,6 +117,13 @@ export default {
     onSelect(film) {
       this.$router.push({name: "film", params: {id: film.id}});
     },
+    onSelectGenre(idGenre) {
+      if (idGenre) {
+        this.$router.push({name: "filmsGenre", params: {idGenre: idGenre}});
+      } else {
+        this.$router.push({name: "films"});
+      }
+    },
   },
 };
 </script>
@@ -123,8 +143,6 @@ export default {
   background-color: #eee;
   margin: 0.5em;
   padding: 0.3em 0em;
-  //height: 1.8em;
-  border-radius: 4px;
 }
 
 .films li:hover {

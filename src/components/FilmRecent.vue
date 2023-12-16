@@ -50,7 +50,7 @@ export default {
       pageNumber: 1,
       filterName: '',
       sortName: 'release_date',
-      sortDir: 'asc',
+      sortDir: 'desc',
       imageBaseUrl: 'https://image.tmdb.org/t/p/', // Ajoutez le préfixe de base ici
     };
   },

@@ -15,6 +15,12 @@ const router = createRouter({
       component: () => import("../views/FilmsView.vue"),
     },
     {
+      path: "/films&idGenre=:idGenre",
+      name: "filmsGenre",
+      component: () => import("../views/FilmsView.vue"),
+      props: castRouteParamsGenre
+    },
+    {
       path: "/film/:id",
       name: "film",
       component: () => import("../views/FilmDetailsView.vue"),
@@ -26,6 +32,11 @@ const router = createRouter({
 function castRouteParams(route) {
   return {
     id: Number(route.params.id),
+  };
+}
+function castRouteParamsGenre(route) {
+  return {
+    idGenre: Number(route.params.idGenre),
   };
 }
 

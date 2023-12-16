@@ -1,8 +1,3 @@
-<!--<template>-->
-<!--  <main>-->
-<!--    <h1>Accueil</h1>-->
-<!--  </main>-->
-<!--</template>-->
 <template>
   <main>
     <h1>Accueil</h1>
@@ -30,10 +25,9 @@ export default {
   },
   mounted() {
     getAllFilms().then(response => {
-      // Sort films by release date in descending order
       this.recentFilms = response.results.sort((a, b) => new Date(b.release_date) - new Date(a.release_date)).slice(0, 3);
+      console.log( response.results)
     });
-    // getAllFilms().then(response => this.films = response.results);
   },
 };
 </script>

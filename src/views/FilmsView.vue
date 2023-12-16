@@ -4,7 +4,7 @@
 
 <script>
 import FilmList from "@/components/FilmList.vue";
-import { getAllFilms } from '@/services/Filmservice.js';
+import {getAllFilms, getMoviesByGenre} from '@/services/Filmservice.js';
 
 export default {
   components: {
@@ -15,8 +15,18 @@ export default {
       films: []
     }
   },
+  props: {
+    idGenre: {
+      type: Number,
+    },
+  },
   mounted() {
     getAllFilms().then(response => this.films = response.results);
+  },
+  watch: {
+    idGenre: function (newGenre) {
+      getMoviesByGenre(newGenre).then(movies => this.films = movies.results);
+    },
   },
 };
 </script>
