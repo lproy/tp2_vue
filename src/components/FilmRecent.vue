@@ -8,16 +8,9 @@
       <button @click="sort('release_date')">Date de sortie</button>
       <span>Recherche par nom: <input v-model="filterName"/></span>
     </fieldset>
-    <button @click="prevPage" :disabled="pageNumber === 1">
-      &lt; Previous
-    </button>
-    Page {{ pageNumber }}
-    <button @click="nextPage" :disabled="pageNumber >= pageCount">
-      Next &gt;
-    </button>
     <ul class="films">
       <li
-          v-for="film in sortedFilteredPaginatedfilms"
+          v-for="film in sortedFilteredfilms"
           :key="film.id"
           v-bind:class="{
           discontinued: film.discontinued,
@@ -52,7 +45,7 @@ export default {
   },
   data() {
     return {
-      title: "Films",
+      title: "Films récent",
       selectedfilm: null,
       pageNumber: 1,
       filterName: '',
@@ -75,16 +68,6 @@ export default {
         return 0;
       })
     },
-    sortedFilteredPaginatedfilms() {
-      const start = (this.pageNumber - 1) * this.pageSize,
-          end = start + this.pageSize;
-
-      return this.sortedFilteredfilms.slice(start, end);
-    },
-    pageCount() {
-      let nbfilms = this.films.length;
-      return Math.floor(nbfilms / this.pageSize);
-    },
   },
   methods: {
     sort: function (fieldToSort) {
@@ -92,14 +75,6 @@ export default {
         this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
       }
       this.sortName = fieldToSort;
-    },
-    nextPage() {
-      this.pageNumber++;
-      this.selectedfilm = null;
-    },
-    prevPage() {
-      this.pageNumber--;
-      this.selectedfilm = null;
     },
     onSelect(film) {
       this.$router.push({name: "film", params: {id: film.id}});
