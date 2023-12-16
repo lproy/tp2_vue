@@ -18,14 +18,14 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/products",
-      name: "products",
-      component: () => import("../views/ProductsView.vue"),
+      path: "/films",
+      name: "films",
+      component: () => import("../views/FilmsView.vue"),
     },
     {
-      path: "/product/:id",
-      name: "product",
-      component: () => import("../views/ProductDetailsView.vue"),
+      path: "/film/:id",
+      name: "film",
+      component: () => import("../views/FilmDetailsView.vue"),
       props: castRouteParams
     },
   ],

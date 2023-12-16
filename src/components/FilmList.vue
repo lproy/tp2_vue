@@ -16,23 +16,23 @@
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
     </button>
-    <ul class="products">
+    <ul class="films">
       <li
-          v-for="product in sortedFilteredPaginatedProducts"
-          :key="product.id"
+          v-for="film in sortedFilteredPaginatedfilms"
+          :key="film.id"
           v-bind:class="{
-          discontinued: product.discontinued,
-          selected: selectedProduct === product,
+          discontinued: film.discontinued,
+          selected: selectedfilm === film,
         }"
-          @click="onSelect(product)"
+          @click="onSelect(film)"
       >
 
         <img
-            :src="imageBaseUrl + 'w200' + product.poster_path"
+            :src="imageBaseUrl + 'w200' + film.poster_path"
             width="200"
         />
-        <span class="name">{{ product.title }}</span>
-        <span class="release_date">{{ product.release_date }}</span>
+        <span class="name">{{ film.title }}</span>
+        <span class="release_date">{{ film.release_date }}</span>
       </li>
     </ul>
   </div>
@@ -41,7 +41,7 @@
 <script>
 export default {
   props: {
-    products: {
+    films: {
       type: Array,
       default: () => [],
     },
@@ -53,8 +53,8 @@ export default {
   },
   data() {
     return {
-      title: "Products",
-      selectedProduct: null,
+      title: "Films",
+      selectedfilm: null,
       pageNumber: 1,
       filterName: '',
       sortName: 'release_date',
@@ -63,28 +63,28 @@ export default {
     };
   },
   computed: {
-    filteredProducts() {
+    filteredfilms() {
       let filter = new RegExp(this.filterName, 'i')
-      return this.products.filter(elem => elem.title.match(filter))
+      return this.films.filter(elem => elem.title.match(filter))
     },
-    sortedFilteredProducts() {
-      return this.filteredProducts.sort((a, b) => {
+    sortedFilteredfilms() {
+      return this.filteredfilms.sort((a, b) => {
         let modifier = 1;
         if (this.sortDir === 'desc') modifier = -1;
         if (a[this.sortName] < b[this.sortName]) return -1 * modifier;
-        if (a[this.sortName] > b[this.sortName]) return 1 * modifier;
+        if (a[this.sortName] > b[this.sortName]) return modifier;
         return 0;
       })
     },
-    sortedFilteredPaginatedProducts() {
+    sortedFilteredPaginatedfilms() {
       const start = (this.pageNumber - 1) * this.pageSize,
           end = start + this.pageSize;
 
-      return this.sortedFilteredProducts.slice(start, end);
+      return this.sortedFilteredfilms.slice(start, end);
     },
     pageCount() {
-      let nbProducts = this.products.length;
-      return Math.floor(nbProducts / this.pageSize);
+      let nbfilms = this.films.length;
+      return Math.floor(nbfilms / this.pageSize);
     },
   },
   methods: {
@@ -96,27 +96,27 @@ export default {
     },
     nextPage() {
       this.pageNumber++;
-      this.selectedProduct = null;
+      this.selectedfilm = null;
     },
     prevPage() {
       this.pageNumber--;
-      this.selectedProduct = null;
+      this.selectedfilm = null;
     },
-    onSelect(product) {
-      this.$router.push({name: "product", params: {id: product.id}});
+    onSelect(film) {
+      this.$router.push({name: "film", params: {id: film.id}});
     },
   },
 };
 </script>
 
 <style lang="css" scoped>
-.products {
+.films {
   margin: 0;
   list-style-type: none;
   padding: 0;
 }
 
-.products li {
+.films li {
   cursor: pointer;
   position: relative;
   left: 0;
@@ -128,40 +128,38 @@ export default {
   border-radius: 4px;
 }
 
-.products li:hover {
+.films li:hover {
   color: #607d8b;
   background-color: yellow;
-  //left: 0.1em;
 }
 
-.products li:hover .name,
-.products li:hover .price {
+.films li:hover .name,
+.films li:hover .price {
   color: #607d8b;
   background-color: #ffd800;
-  //left: 0.1em;
 }
 
-.products li.selected {
+.films li.selected {
   background-color: #0094ff;
   color: white;
 }
 
-.products li.selected:hover {
+.films li.selected:hover {
   color: white;
 }
 
-.products li.selected .name,
-.products li.selected .price {
+.films li.selected .name,
+.films li.selected .price {
   background-color: #0026ff;
   color: white;
 }
 
-.products .text {
+.films .text {
   position: relative;
   top: -3px;
 }
 
-.products .name {
+.films .name {
   display: inline-block;
   color: white;
   padding: 0.5em 0.7em 0em 0.7em;
@@ -179,7 +177,7 @@ export default {
   text-overflow: ellipsis;
 }
 
-.products .price {
+.films .price {
   float: right;
   width: 15%;
   color: white;
@@ -194,7 +192,7 @@ export default {
   border-radius: 0px 4px 4px 0px;
 }
 
-.products .description {
+.films .description {
   height: 1.8em;
   display: inline-block;
   width: 40%;
@@ -203,8 +201,8 @@ export default {
   text-overflow: ellipsis;
 }
 
-.products .discontinued,
-.products .discontinued * {
+.films .discontinued,
+.films .discontinued * {
   color: red !important;
 }
 </style>

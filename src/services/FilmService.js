@@ -7,13 +7,13 @@ let headers = {
 
 const RESOURCE_NAME = "popular";
 
-export async function getAllProducts() {
+export async function getAllFilms() {
   const response = await fetch(baseURL + RESOURCE_NAME + api, headers);
   return await response.json();
 }
 
-export async function getProduct(id) {
-    const response = await fetch(baseURL + RESOURCE_NAME + api + '/' + id, headers);
+export async function getFilm(id) {
+    const response = await fetch(baseURL + id + api, headers);
     return await response.json();
   }
 
