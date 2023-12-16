@@ -1,7 +1,7 @@
 <template>
   <h1></h1>
   <h2>{{ film.title}}</h2>
-  <p>{{ film.overview}}</p>
+  <p class="description">{{ film.overview}}</p>
   <p>Note: {{film.vote_average}}</p>
   <p>Durée: {{ film.runtime }}</p>
   <p>L’année de parution: {{ film.release_date }}</p>
@@ -28,4 +28,8 @@ export default {
 };
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.description{
+  max-width: 400px;
+}
+</style>

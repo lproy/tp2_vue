@@ -22,6 +22,15 @@
     <button @click="nextPage" :disabled="pageNumber >= pageCount">
       Next &gt;
     </button>
+
+    <div v-if="sortedFilteredfilms.length !== 0">
+      <p>Nombre de films: {{ sortedFilteredfilms.length }}</p>
+      <!-- Render additional content for films found -->
+    </div>
+    <div v-else>
+      <h3>On ne trouve aucun film répondant au(x) critère(s) de recherche</h3>
+    </div>
+
     <ul class="films">
       <li
           v-for="film in sortedFilteredPaginatedfilms"
@@ -45,7 +54,7 @@
 </template>
 
 <script>
-import {getAllGenres} from '@/services/Filmservice.js';
+import {getAllGenres, getMoviesByGenre} from '@/services/Filmservice.js';
 
 export default {
   props: {
@@ -95,7 +104,7 @@ export default {
       return this.sortedFilteredfilms.slice(start, end);
     },
     pageCount() {
-      let nbfilms = this.films.length;
+      let nbfilms = this.sortedFilteredfilms.length;
       return Math.floor(nbfilms / this.pageSize);
     },
   },
@@ -130,30 +139,37 @@ export default {
 
 <style lang="css" scoped>
 .films {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
   margin: 0;
   list-style-type: none;
   padding: 0;
 }
 
 .films li {
+  height: 390px;
+  padding: 0.7em;
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
   position: relative;
   left: 0;
-  height: 100%;
   background-color: #eee;
   margin: 0.5em;
-  padding: 0.3em 0em;
+  border-radius: 4px;
 }
 
 .films li:hover {
-  color: #607d8b;
-  background-color: yellow;
+  color: #181818;
+  background-color: white;
+  outline: 1px solid #E50914;
 }
 
-.films li:hover .name,
-.films li:hover .price {
-  color: #607d8b;
-  background-color: #ffd800;
+.films li:hover .name {
+  color: white;
+  background-color: #E50914;
 }
 
 .films li.selected {
@@ -165,61 +181,43 @@ export default {
   color: white;
 }
 
-.films li.selected .name,
-.films li.selected .price {
+.films li.selected .name {
   background-color: #0026ff;
   color: white;
 }
 
-.films .text {
-  position: relative;
-  top: -3px;
-}
 
 .films .name {
   display: inline-block;
   color: white;
-  padding: 0.5em 0.7em 0em 0.7em;
-  background-color: #607d8b;
-  line-height: 1em;
-  position: relative;
-  left: -1px;
-  top: -4px;
-  height: 1.8em;
-  margin-right: 0.8em;
-  border-radius: 4px 0px 0px 4px;
-  width: 30%;
+  padding: 0.7em;
+  background-color: #181818;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.films .price {
-  float: right;
-  width: 15%;
-  color: white;
-  padding: 0.5em 0.7em 0em 0.7em;
-  background-color: #607d8b;
-  line-height: 1em;
-  position: relative;
-  left: -1px;
-  top: -4px;
-  height: 1.8em;
-  margin-left: 0.8em;
-  border-radius: 0px 4px 4px 0px;
-}
 
-.films .description {
-  height: 1.8em;
-  display: inline-block;
-  width: 40%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
 .films .discontinued,
 .films .discontinued * {
   color: red !important;
+}
+button{
+  background: #E50914;
+  padding: 7px;
+  margin:10px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  &:disabled{
+    background: #73060b;
+  }
+  &:hover{
+    transition: 300ms;
+    color: #181818;
+    background: #f84853;
+  }
 }
 </style>

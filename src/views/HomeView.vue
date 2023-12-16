@@ -5,18 +5,18 @@
       <p>Bienvenue sur notre site de critiques de films ! Découvrez les derniers films et partagez vos avis.</p>
     </section>
     <section class="recent-films">
-      <FilmRecent :films="recentFilms" :page-size="3"></FilmRecent>
+      <FilmList :films="recentFilms" :page-size="3"></FilmList>
     </section>
   </main>
 </template>
 
 <script>
 import {getAllFilms} from "@/services/FilmService";
-import FilmRecent from "@/components/FilmRecent.vue";
+import FilmList from "@/components/FilmList.vue";
 
 export default {
   components: {
-    FilmRecent,
+    FilmList,
   },
   data() {
     return {
