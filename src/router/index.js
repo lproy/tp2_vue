@@ -1,32 +1,43 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import AccueilView from "@/views/AccueilView.vue";
-import ProductDetailsView from "@/views/ProductDetailsView.vue";
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/HomeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'accueil',
-      component: AccueilView
+      path: "/",
+      name: "home",
+      component: HomeView,
     },
     {
-      path: '/products',
-      name: 'products',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/ProductsView.vue')
+      path: "/films",
+      name: "films",
+      component: () => import("../views/FilmsView.vue"),
     },
     {
-      /* ProductDetails sera appelé dans <RouterView> de ProductsHome
-      lorsque la route est /products/:id */
-      path: '/product/:id',
-      name: 'productDetailsView',
-      component: ProductDetailsView,
-      props: true
-    }
-  ]
-})
+      path: "/films&idGenre=:idGenre",
+      name: "filmsGenre",
+      component: () => import("../views/FilmsView.vue"),
+      props: castRouteParamsGenre
+    },
+    {
+      path: "/film/:id",
+      name: "film",
+      component: () => import("../views/FilmDetailsView.vue"),
+      props: castRouteParams
+    },
+  ],
+});
 
-export default router
+function castRouteParams(route) {
+  return {
+    id: Number(route.params.id),
+  };
+}
+function castRouteParamsGenre(route) {
+  return {
+    idGenre: Number(route.params.idGenre),
+  };
+}
+
+export default router;
